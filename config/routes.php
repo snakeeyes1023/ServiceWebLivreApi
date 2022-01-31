@@ -14,7 +14,11 @@ return function (App $app) {
 
     $app->get('/', \App\Action\HomeAction::class)->setName('home');
 
-    $app->post('/users', \App\Action\UserCreateAction::class);
+    $app->post('/user', \App\Action\UserCreateAction::class);
+
+    $app->put('/user/{id}', \App\Action\UserEditAction::class);
+
+    $app->delete('/user/{id}', \App\Action\UserDeleteAction::class);
 
     // Documentation de l'api
     $app->get('/docs', \App\Action\Docs\SwaggerUiAction::class);

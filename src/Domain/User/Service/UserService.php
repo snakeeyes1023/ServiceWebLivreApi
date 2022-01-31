@@ -85,4 +85,18 @@ final class UserService
             throw new ValidationException('Please check your input', $errors);
         }
     }
+
+    public function editUser(array $data, int $id)
+    {
+        // Input validation
+        $this->validateNewUser($data);
+
+        return $this->repository->editUser($data, $id);
+    }
+
+    public function deleteUser(int $id)
+    {
+        // Input validation
+        return $this->repository->deleteUser($id);
+    }
 }

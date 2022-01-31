@@ -66,5 +66,42 @@ class UserRepository
         $statement =  $this->connection->query($sql);
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function editUser(array $user, $id)
+    {
+        $row = [
+            'username' => $user['username'],
+            'first_name' => $user['first_name'],
+            'last_name' => $user['last_name'],
+            'email' => $user['email'],
+        ];
+
+        $sql = "UPDATE users SET 
+                username=:username, 
+                first_name=:first_name, 
+                last_name=:last_name, 
+                email=:email WHERE id = $id;";
+
+        $this->connection->prepare($sql)->execute($row);
+
+        $result = [
+            'resultat' => "true"
+        ];
+
+        return $result;
+    }
+
+    public function deleteUser(int $id)
+    {
+        $sql = "DELETE users WHERE id = $id;";
+
+        $this->connection->prepare($sql)->execute();
+
+        $result = [
+            'resultat' => "true"
+        ];
+
+        return $result;
+    }
 }
 
