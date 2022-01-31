@@ -8,7 +8,7 @@ use App\Exception\ValidationException;
 /**
  * Service.
  */
-final class UserCreator
+final class UserService
 {
     /**
      * @var UserRepository
@@ -48,15 +48,12 @@ final class UserCreator
 
     public function getUsers()
     {
-        // Input validation
-
-        // Insert user
         return $this->repository->getUsers();
+    }
 
-        // Logging here: User created successfully
-        //$this->logger->info(sprintf('User created successfully: %s', $userId));
-
-
+    public function getUser(int $id)
+    {
+        return $this->repository->getUser($id);
     }
 
     /**

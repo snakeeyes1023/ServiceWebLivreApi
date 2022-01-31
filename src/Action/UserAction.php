@@ -4,17 +4,17 @@
 namespace App\Action;
 
 
-use App\Domain\User\Service\UserCreator;
+use App\Domain\User\Service\UserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class UserAction
 {
-    private $userCreator;
+    private $userService;
 
-    public function __construct(UserCreator $userCreator)
+    public function __construct(UserService $userService)
     {
-        $this->userCreator = $userCreator;
+        $this->userService = $userService;
     }
 
     public function __invoke(
@@ -22,8 +22,16 @@ class UserAction
         ResponseInterface $response
     ): ResponseInterface {
 
-        // Invoke the Domain with inputs and retain the result
-        $users = $this->userCreator->getUsers();
+        $id = (int)$request->getAttributes()["id"];
+
+        $users = null;
+
+        if (isset($id) && !empty($id)){
+            $users = $this->userService->getUser($id);
+        }
+        else{
+            $users = $this->userService->getUsers();
+        }
 
         // Build the HTTP response
         $response->getBody()->write((string)json_encode($users));

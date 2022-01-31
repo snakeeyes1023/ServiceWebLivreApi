@@ -58,5 +58,13 @@ class UserRepository
         $statement =  $this->connection->query($sql);
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function getUser($id)
+    {
+        $sql = "SELECT * FROM Users WHERE id = $id;";
+
+        $statement =  $this->connection->query($sql);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
 

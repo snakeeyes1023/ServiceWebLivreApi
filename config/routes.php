@@ -7,7 +7,10 @@ use Slim\App;
 
 return function (App $app) {
 
-    $app->get('/list/users', \App\Action\UserAction::class);
+
+    $app->get('/user/{id}', \App\Action\UserAction::class);
+
+    $app->get('/users', \App\Action\UserAction::class);
 
     $app->get('/', \App\Action\HomeAction::class)->setName('home');
 
