@@ -7,7 +7,7 @@ use PDO;
 /**
  * Repository.
  */
-class UserCreatorRepository
+class UserRepository
 {
     /**
      * @var PDO The database connection
@@ -49,6 +49,14 @@ class UserCreatorRepository
         $this->connection->prepare($sql)->execute($row);
 
         return (int)$this->connection->lastInsertId();
+    }
+
+    public function getUsers()
+    {
+        $sql = "SELECT * FROM Users;";
+
+        $statement =  $this->connection->query($sql);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 }
 
