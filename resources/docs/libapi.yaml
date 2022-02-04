@@ -1,0 +1,172 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Base-Slim-Skeleton
+  description: Structure de base d'un api créé dans le cadre du cours Services Web H2022
+
+servers:
+  - url: http://localhost/ServiceWebLivreApi
+paths:
+  /:
+    get:
+      tags:
+        - Général
+      summary: Message de bienvenue
+      responses:
+        '200':
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                example:
+                  success: true
+                  message : 'Hello world!'
+
+  /users:
+    get:
+      tags:
+        - Usagers
+      summary: Obtenir un usager au hazard.
+
+      responses:
+        '201':
+          description: Le id de l'usager créé
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/User"
+    post:
+      tags:
+        - Usagers
+      summary: Création d'un usager.
+      requestBody:
+        description: Les informations de l'usager à créer
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+              example:
+                username : 'mathF'
+                first_name: 'Mathieu'
+                last_name: 'Fréchette'
+                email: 'frechette.mathieu@cegepvicto.ca'
+      responses:
+        '201':
+          description: Le id de l'usager créé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                example:
+                  id : 1
+
+  /user/{Id}:
+    get:
+      tags:
+        - "Usager Action"
+      summary: "Obtenir un usager"
+      description: ""
+      operationId: "GetById"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "Id"
+          in: "path"
+          description: "Le Id de l'usager à selectionner. "
+          required: true
+          type: "number"
+      responses:
+        "200":
+          description: "Réussi"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+        - "Usager Action"
+      summary: "Modifier Usagers"
+      description: "Modifier un usager selon un model fourni."
+      operationId: "updateUser"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "Id"
+          in: "path"
+          description: "Id need to be updated"
+          required: true
+          type: "number"
+        - in: "body"
+          name: "body"
+          description: "Updated user object"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+            example:
+              username: 'mathF'
+              first_name: 'Mathieu'
+              last_name: 'Fréchette'
+              email: 'frechette.mathieu@cegepvicto.ca'
+      responses:
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+        - "Usager Action"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "Id"
+          in: "path"
+          description: "The Id that needs to be deleted"
+          required: true
+          type: "string"
+      responses:
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      email:
+        type: string
+    xml:
+      name: "Order"
