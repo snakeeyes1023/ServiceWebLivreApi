@@ -30,7 +30,9 @@ class UserAction
             $users = $this->userService->getUser($id);
         }
         else{
-            $users = $this->userService->getUsers();
+            $options = (int)$request->getQueryParams();
+
+            $users = $this->userService->getUsers($options);
         }
 
         // Build the HTTP response

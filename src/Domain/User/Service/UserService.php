@@ -46,10 +46,42 @@ final class UserService
         return $userId;
     }
 
-    public function getUsers()
+    public function getUsers($options)
     {
-        return $this->repository->getUsers();
+//        les options de filtre, tri, sélection de champs et de pagination
+        $order = $options['order'] ?? 'asc';
+
+        $users = $this->repository->getUsers($order);
+
+        $page = $options['page'] ?? 0;
+        $filter = $options['filter'] ?? "";
+        $champ = $options['champ'] ?? "";
+
+
+        if (!empty($page)){
+            $users = array_slice( $users, 1 * $page , 10 );
+        }
+
+        if (!empty($filter)){
+            $users = array_filter($users, function($obj) use ($filter) {
+
+                list($userMail, $domain) = explode('@', $obj->email);
+                if ($domain == $filter) {
+                    return true;
+                }
+                return false;
+            });
+        }
+
+        if (!empty($champ)){
+            $users = array_map(function($x) use ($champ) {
+                return $x[$champ];
+            }, $users);
+        }
+
+        return $users;
     }
+
 
     public function getUser(int $id)
     {

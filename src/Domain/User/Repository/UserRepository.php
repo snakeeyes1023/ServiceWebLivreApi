@@ -51,9 +51,9 @@ class UserRepository
         return (int)$this->connection->lastInsertId();
     }
 
-    public function getUsers()
+    public function getUsers($order)
     {
-        $sql = "SELECT * FROM Users;";
+        $sql = "SELECT * FROM Users order by username $order;";
 
         $statement =  $this->connection->query($sql);
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -70,6 +70,7 @@ class UserRepository
     public function editUser(array $user, $id)
     {
         $row = [
+            "id"=> $id,
             'username' => $user['username'],
             'first_name' => $user['first_name'],
             'last_name' => $user['last_name'],
@@ -80,7 +81,7 @@ class UserRepository
                 username=:username, 
                 first_name=:first_name, 
                 last_name=:last_name, 
-                email=:email WHERE id = $id;";
+                email=:email WHERE id =: id;";
 
         $this->connection->prepare($sql)->execute($row);
 
