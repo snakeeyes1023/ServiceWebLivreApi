@@ -48,7 +48,7 @@ final class UserService
 
     public function getUsers($options)
     {
-//        les options de filtre, tri, sélection de champs et de pagination
+        // les options de filtre, tri, sélection de champs et de pagination
         $order = $options['order'] ?? 'asc';
 
         $users = $this->repository->getUsers($order);
@@ -59,7 +59,7 @@ final class UserService
 
 
         if (!empty($page)){
-            $users = array_slice( $users, 1 * $page , 10 );
+            $users = array_slice( $users, $page * (10 -1) , 10 );
         }
 
         if (!empty($filter)){

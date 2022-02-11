@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Action;
+namespace App\Action\UserActions;
 
 
 use App\Domain\User\Service\UserService;
@@ -30,10 +30,11 @@ class UserAction
             $users = $this->userService->getUser($id);
         }
         else{
-            $options = (int)$request->getQueryParams();
+            $options = $request->getQueryParams();
 
             $users = $this->userService->getUsers($options);
         }
+
 
         // Build the HTTP response
         $response->getBody()->write((string)json_encode($users));

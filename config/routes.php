@@ -7,18 +7,22 @@ use Slim\App;
 
 return function (App $app) {
 
+    //USER
+    $app->get('/user/{id}', \App\Action\UserActions\UserAction::class);
 
-    $app->get('/user/{id}', \App\Action\UserAction::class);
+    $app->get('/users', \App\Action\UserActions\UserAction::class);
 
-    $app->get('/users', \App\Action\UserAction::class);
+    $app->get('/', \App\Action\UserActions\HomeAction::class)->setName('home');
 
-    $app->get('/', \App\Action\HomeAction::class)->setName('home');
+    $app->post('/user', \App\Action\UserActions\UserCreateAction::class);
 
-    $app->post('/user', \App\Action\UserCreateAction::class);
+    $app->put('/user/{id}', \App\Action\UserActions\UserEditAction::class);
 
-    $app->put('/user/{id}', \App\Action\UserEditAction::class);
+    $app->delete('/user/{id}', \App\Action\UserActions\UserDeleteAction::class);
 
-    $app->delete('/user/{id}', \App\Action\UserDeleteAction::class);
+
+    //livre
+    $app->get('/books', \App\Action\BookActions\BookAction::class);
 
     // Documentation de l'api
     $app->get('/docs', \App\Action\Docs\SwaggerUiAction::class);
