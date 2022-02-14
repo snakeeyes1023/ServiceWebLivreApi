@@ -16,7 +16,7 @@ final class UserEditAction
     {
         $this->logger = $loggerFactory
         ->addFileHandler('usersLog.log')
-        ->createLogger('MessageFromMath');
+        ->createLogger('UserActions');
 
         $this->userService = $userService;
     }
