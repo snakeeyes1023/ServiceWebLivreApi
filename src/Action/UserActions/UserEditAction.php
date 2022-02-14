@@ -3,15 +3,21 @@
 namespace App\Action\UserActions;
 
 use App\Domain\User\Service\UserService;
+use App\Factory\LoggerFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 final class UserEditAction
 {
     private $userService;
+    private $logger;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, LoggerFactory $loggerFactory)
     {
+        $this->logger = $loggerFactory
+        ->addFileHandler('usersLog.log')
+        ->createLogger('MessageFromMath');
+
         $this->userService = $userService;
     }
 
@@ -21,11 +27,14 @@ final class UserEditAction
     ): ResponseInterface
     {
         // Collect input from the HTTP request
-        $data = (array)$request->getParsedBody();
+        $data = $request->getParsedBody();
+
         $id = (int)$request->getAttributes()["id"];
 
         // Invoke the Domain with inputs and retain the result
         $result = $this->userService->editUser($data, $id);
+
+        $this->logger->info("L'usager ". $data["username"] . " as été modifié : " . (string)json_encode($result));
 
         // Transform the result into the JSON representation
 

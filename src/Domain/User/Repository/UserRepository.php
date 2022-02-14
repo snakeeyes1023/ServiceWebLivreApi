@@ -71,25 +71,21 @@ class UserRepository
     {
         $row = [
             "id"=> $id,
-            'username' => $user['username'],
-            'first_name' => $user['first_name'],
-            'last_name' => $user['last_name'],
-            'email' => $user['email'],
+            'username' => $user['username'] ?? "TEST",
+            'first_name' => $user['first_name'] ?? "TEST",
+            'last_name' => $user['last_name'] ?? "TEST",
+            'email' => $user['email'] ?? "TEST",
         ];
 
         $sql = "UPDATE users SET 
                 username=:username, 
                 first_name=:first_name, 
                 last_name=:last_name, 
-                email=:email WHERE id =: id;";
+                email=:email WHERE id =:id;";
 
         $this->connection->prepare($sql)->execute($row);
 
-        $result = [
-            'resultat' => "true"
-        ];
-
-        return $result;
+        return $this->getUser($id);
     }
 
     public function deleteUser(int $id)

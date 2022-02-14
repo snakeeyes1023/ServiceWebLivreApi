@@ -121,7 +121,7 @@ final class UserService
     public function editUser(array $data, int $id)
     {
         // Input validation
-        $this->validateNewUser($data);
+        //$this->validateNewUser($data);
 
         return $this->repository->editUser($data, $id);
     }
