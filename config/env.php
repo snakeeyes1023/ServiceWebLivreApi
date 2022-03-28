@@ -3,14 +3,14 @@
 // Constante du mode de l'application
 // dev : variables utilisées en local
 // prod : pour le déploiement de l'api en production
-define("MODE", "prod");
+define("MODE", "dev");
 
 switch (MODE) {
     case "dev":
         // Configuration BD en local
         $_ENV['host'] = 'localhost';
         $_ENV['username'] = 'root';
-        $_ENV['database'] = 'livreapi';
+        $_ENV['database'] = 'livre_api';
         $_ENV['password'] = 'mysql';
         break;
 

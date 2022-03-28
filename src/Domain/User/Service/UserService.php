@@ -41,11 +41,23 @@ final class UserService
         $userId = $this->repository->insertUser($data);
 
         // Logging here: User created successfully
-        //$this->logger->info(sprintf('User created successfully: %s', $userId));
+        $this->logger->info(sprintf('User created successfully: %s', $userId));
 
         return $userId;
     }
 
+    //Validate the user token
+    public function isTokenValid($token)
+    {
+        return $this->repository->validateToken($token);
+    }
+    /**
+     * Validate new user.
+     *
+     * @param array $data The form data
+     *
+     * @throws ValidationException
+     */
     public function getUsers($options)
     {
         // les options de filtre, tri, sélection de champs et de pagination
@@ -82,7 +94,13 @@ final class UserService
         return $users;
     }
 
-
+    /**
+     * Get the new user data.
+     *
+     * @param array $data The form data
+     *
+     * @throws ValidationException
+     */
     public function getUser(int $id)
     {
         return $this->repository->getUser($id);
@@ -106,7 +124,9 @@ final class UserService
         if (empty($data['username'])) {
             $errors['username'] = 'Input required';
         }
-
+        if (empty($data['password'])) {
+            $errors['password'] = 'Input required';
+        }
         if (empty($data['email'])) {
             $errors['email'] = 'Input required';
         } elseif (filter_var($data['email'], FILTER_VALIDATE_EMAIL) === false) {
@@ -118,6 +138,13 @@ final class UserService
         }
     }
 
+    /**
+     * Update user.
+     *
+     * @param array $data The form data
+     *
+     * @return void
+     */
     public function editUser(array $data, int $id)
     {
         // Input validation
@@ -126,9 +153,58 @@ final class UserService
         return $this->repository->editUser($data, $id);
     }
 
+    /**
+     * Delete user.
+     *
+     * @param int $id The user ID
+     *
+     * @return void
+     */
     public function deleteUser(int $id)
     {
         // Input validation
         return $this->repository->deleteUser($id);
+    }
+
+    /**
+     * Get the user data.
+     *
+     * @param int $id The user ID
+     *
+     * @return array The user data
+     */
+    public function getUserIdFromAuthorizationHeader(string $authHeader)
+    {
+        //decode base64 auth header
+        $authHeader = base64_decode(str_replace('Basic ', '', $authHeader));
+
+        //split username and password
+        list($username, $password) = explode(':', $authHeader);
+
+        //validate user credentials
+        $user = $this->repository->getUserByUsername($username);
+
+        //validate password 
+        if (password_verify($password, $user["password"])) {
+            return $user["id"];
+        }
+        else 
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Create a api token and save it in the database.
+     * 
+     * @param int $userId The user ID
+     * 
+     */
+    public function createApiToken(int $userId)
+    {
+        // create a 10 lenght token
+        $token = bin2hex(random_bytes(10));
+        $this->repository->createApiToken($userId, $token);
+        return $token;
     }
 }

@@ -20,11 +20,11 @@ class BookAction
         ResponseInterface $response
     ): ResponseInterface
     {
-        $users = $this->bookService->getBooks();
+        $books = $this->bookService->getBooks();
 
 
         // Build the HTTP response
-        $response->getBody()->write((string)json_encode($users));
+        $response->getBody()->write((string)json_encode($books));
 
         return $response
             ->withHeader('Content-Type', 'application/json')
